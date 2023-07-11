@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { AppInfo } from 'src/modules/app-infos/app-info.entity';
 import { Subject } from 'src/modules/subjects/subject.entity';
 import { User } from 'src/modules/users/user.entity';
-import { SEQUELIZE, DEVELOPMENT, TEST, PRODUCTION } from '../constants';
+import { PRODUCTION, SEQUELIZE } from '../constants';
 import { databaseConfig } from './database.config';
 
 export const databaseProviders = [
@@ -11,17 +11,11 @@ export const databaseProviders = [
     useFactory: async () => {
       let config;
       switch (process.env.NODE_ENV) {
-        case DEVELOPMENT:
-          config = databaseConfig.development;
-          break;
-        case TEST:
-          config = databaseConfig.test;
-          break;
         case PRODUCTION:
           config = databaseConfig.production;
           break;
         default:
-          config = databaseConfig.development;
+          config = databaseConfig.production;
       }
       const sequelize = new Sequelize(config);
       sequelize.addModels([User, AppInfo, Subject]);
